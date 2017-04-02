@@ -1,7 +1,7 @@
 {
   "name": "side-navigation",
   "version": "1.0.0",
-  "description": "A light-weight side navigation implementation in ES6",
+  "description": "A light-weight, no-dependency side navigation implementation in ES6",
   "main": "src/sideNavigation.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

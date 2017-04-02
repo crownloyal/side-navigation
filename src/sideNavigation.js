@@ -114,9 +114,4 @@ class sideNavigation {
     }
 }
 
-let sidenav = new sideNavigation({
-    navigation : 'aside',
-    toggleButton : '#toggle-side-menu',
-    closed : true,
-    position : 'left'
-});
+export { sideNavigation as default };
