@@ -1,5 +1,6 @@
-class sideNavigation {
+'use strict';
 
+class sideNavigation {
     constructor(options) {
 
         if(! options.navigation || options.toggleButton) {
@@ -114,4 +115,6 @@ class sideNavigation {
     }
 }
 
-export { sideNavigation as default };
+export default (options) => {
+    return new sideNavigation(options);
+}
