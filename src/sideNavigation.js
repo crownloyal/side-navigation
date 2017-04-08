@@ -68,7 +68,7 @@ class sideNavigation {
     _trackTouch(event) {
         this.touch.animatePositionX = event.touches[0].pageX;
 
-        if(! this.state.touchingNavigation || this.touch.dragDirection() === this.settings.position) return;
+        if(! this.state.touchingNavigation || this.touch.dragDirection() !== this.settings.position) return;
 
         this.settings.navigationContainer.style.transform = 'translateX(' + this.touch.distanceX() + 'px)';
         this.settings.navigationContainer.style.opacity = 1 - Math.abs(this.touch.distanceX()) * 0.005;
