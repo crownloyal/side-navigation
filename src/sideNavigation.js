@@ -6,14 +6,14 @@ class sideNavigation {
         if(! options.navigation || options.toggleButton) {
             new Error("Please define navigation and toggle button in an options object.")
         }
-        if(! options.position == 'left' || 'right') { options.position = undefined; }
-        if(! options.closed == true || false ) { options.position = undefined; }
+        options.position = (options.position === 'right') ? options.position : 'left';
+        options.closed = (options.closed === false ) ? options.closed : true;
 
         this.settings = {
             navigationContainer : document.querySelector(options.navigation),
             toggleButton : document.querySelector(options.toggleButton),
-            closed: options.closed || 'true',
-            position : options.position || 'left'
+            closed: options.closed,
+            position : options.position
         }
 
         this._setup();
