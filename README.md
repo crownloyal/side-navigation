@@ -18,6 +18,16 @@ new sideNavigation({ options });
 
 `closed`: (optional :: boolean) describes if the navigation is open or closed during initialisation
 
+#### Example
+```
+new sideNavigation({
+    navigation: 'nav#menu',
+    toggleButton: '#toggle',
+    position: 'right',
+    closed: true
+})
+```
+
 ### Styling
 
 Styling is absolutely up to you and your creative freedom.
