@@ -20,7 +20,7 @@ new sideNavigation({ options });
 
 ### Styling
 
-Styling is absolutely up do you and your cretive freedom.
+Styling is absolutely up to you and your creative freedom.
 However, `side-navigation` merely adds a single class to your sidenav when you close it which requires the following:
 ```
 #menu.navigation-closed{
