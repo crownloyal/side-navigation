@@ -1,9 +1,13 @@
 # side-navigation
 A light-weight side navigation implementation in ES6
 
+## Installation
+
+`npm install side-navigation`
+
 ## Usage
 ```
-import sideNavigation from 'sideNavigation';
+import sideNavigation from 'side-navigation';
 
 new sideNavigation({ options });
 ```
