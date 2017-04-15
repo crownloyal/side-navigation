@@ -16,7 +16,7 @@ new sideNavigation({ options });
 
 `navigation`: querySelector for the main navigation container
 
-`toggleButton`: querySelector for the main navigation container
+`toggleButton`: querySelector for the menu toggle button
 
 `position`: (optional :: string) is either 'left' or 'right' and describes from where the navigation slides in, default: 'left'
 
