@@ -1,6 +1,6 @@
 {
   "name": "side-navigation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A light-weight, no-dependency side navigation implementation in ES6",
   "main": "src/sideNavigation.js",
   "scripts": {
@@ -9,7 +9,15 @@
   "keywords": [
     "es6",
     "sidenav",
-    "navigation"
+    "navigation",
+    "side",
+    "side-navigation",
+    "burger",
+    "menu",
+    "burger-menu",
+    "responsive",
+    "flexible"
+
   ],
   "author": "Dominic M Brause",
   "license": "ISC"
