@@ -31,7 +31,14 @@ class sideNavigation {
         this.touch = {
             startPositionX : 0,
             animatePositionX : 0,
-            swipeLimit : 75,
+            startTimestamp : 0,
+            lastPositionX : 0,
+            lastDirection : null,
+            reversed : false,
+            navigationWidth : 0,
+            swipeWidthRatio : 0.3,
+            fastSwipeDistance : 40,
+            fastSwipeDuration : 200,
             distanceX : () => {
                 return this.touch.animatePositionX - this.touch.startPositionX;
             },
@@ -64,11 +71,27 @@ class sideNavigation {
 
         this.state.touchingNavigation = true;
         this.touch.startPositionX = event.touches[0].pageX;
+        this.touch.animatePositionX = this.touch.startPositionX;
+        this.touch.lastPositionX = this.touch.startPositionX;
+        this.touch.lastDirection = null;
+        this.touch.reversed = false;
+        this.touch.startTimestamp = this._touchTimestamp(event);
+        this.touch.navigationWidth = this._navigationWidth();
     }
     _trackTouch(event) {
-        this.touch.animatePositionX = event.touches[0].pageX;
+        if(!this.state.touchingNavigation) return;
 
-        if(! this.state.touchingNavigation || this.touch.dragDirection() !== this.settings.position) return;
+        this.touch.animatePositionX = event.touches[0].pageX;
+        if(this.touch.animatePositionX !== this.touch.lastPositionX) {
+            let currentDirection = (this.touch.animatePositionX < this.touch.lastPositionX) ? 'left' : 'right';
+            if(this.touch.lastDirection && this.touch.lastDirection !== currentDirection) {
+                this.touch.reversed = true;
+            }
+            this.touch.lastDirection = currentDirection;
+            this.touch.lastPositionX = this.touch.animatePositionX;
+        }
+
+        if(this.touch.dragDirection() !== this.settings.position) return;
 
         this.settings.navigationContainer.style.transform = 'translateX(' + this.touch.distanceX() + 'px)';
         this.settings.navigationContainer.style.opacity = 1 - Math.abs(this.touch.distanceX()) * 0.005;
@@ -76,7 +99,7 @@ class sideNavigation {
     _endTouch(event) {
         if(!this.state.touchingNavigation) { return; }
 
-        if(this.touch.dragDirection() === this.settings.position && this.touch.swipeLimit < Math.abs(this.touch.distanceX())) {
+        if(this._isClosingSwipe(event)) {
             this.hideNavigation();
         } else {
             this.openNavigation();
@@ -84,6 +107,33 @@ class sideNavigation {
 
         this.state.touchingNavigation = false;
         this.touch.timer = 0;
+        this.touch.reversed = false;
+    }
+    _touchTimestamp(event) {
+        if(typeof event.timeStamp === 'number') {
+            return event.timeStamp;
+        }
+        return Date.now();
+    }
+    _navigationWidth() {
+        let width = this.settings.navigationContainer.getBoundingClientRect().width;
+        if(width > 0) {
+            return width;
+        }
+        return this.settings.navigationContainer.offsetWidth || 0;
+    }
+    _isClosingSwipe(event) {
+        let dragDistance = Math.abs(this.touch.distanceX());
+        let swipeLimit = this.touch.navigationWidth * this.touch.swipeWidthRatio;
+        let minimumFastSwipeDistance = this.touch.fastSwipeDistance;
+        if(swipeLimit > 0) {
+            minimumFastSwipeDistance = Math.min(this.touch.fastSwipeDistance, swipeLimit);
+        }
+        let isFastSwipe = this._touchTimestamp(event) - this.touch.startTimestamp <= this.touch.fastSwipeDuration;
+
+        return this.touch.dragDirection() === this.settings.position &&
+            !this.touch.reversed &&
+            (dragDistance >= swipeLimit || (isFastSwipe && dragDistance >= minimumFastSwipeDistance));
     }
     toggleNavigation() {
         if(this.state.isClosed) {
