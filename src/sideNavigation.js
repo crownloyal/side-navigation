@@ -117,14 +117,18 @@ class sideNavigation {
     }
     _navigationWidth() {
         let width = this.settings.navigationContainer.getBoundingClientRect().width;
-        return width || this.settings.navigationContainer.offsetWidth || 0;
+        if(width > 0) {
+            return width;
+        }
+        return this.settings.navigationContainer.offsetWidth || 0;
     }
     _isClosingSwipe(event) {
         let dragDistance = Math.abs(this.touch.distanceX());
         let swipeLimit = this.touch.navigationWidth * this.touch.swipeWidthRatio;
-        let minimumFastSwipeDistance = (swipeLimit > 0)
-            ? Math.min(this.touch.fastSwipeDistance, swipeLimit)
-            : this.touch.fastSwipeDistance;
+        let minimumFastSwipeDistance = this.touch.fastSwipeDistance;
+        if(swipeLimit > 0) {
+            minimumFastSwipeDistance = Math.min(this.touch.fastSwipeDistance, swipeLimit);
+        }
         let isFastSwipe = this._touchTimestamp(event) - this.touch.startTimestamp <= this.touch.fastSwipeDuration;
 
         return this.touch.dragDirection() === this.settings.position &&
