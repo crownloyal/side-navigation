@@ -35,6 +35,7 @@ class sideNavigation {
             lastPositionX : 0,
             lastDirection : null,
             reversed : false,
+            navigationWidth : 0,
             swipeWidthRatio : 0.3,
             fastSwipeDistance : 40,
             fastSwipeDuration : 200,
@@ -75,6 +76,7 @@ class sideNavigation {
         this.touch.lastDirection = null;
         this.touch.reversed = false;
         this.touch.startTimestamp = this._touchTimestamp(event);
+        this.touch.navigationWidth = this._navigationWidth();
     }
     _trackTouch(event) {
         if(!this.state.touchingNavigation) return;
@@ -114,15 +116,15 @@ class sideNavigation {
         return Date.now();
     }
     _navigationWidth() {
-        if(this.settings.navigationContainer.getBoundingClientRect) {
-            return this.settings.navigationContainer.getBoundingClientRect().width;
-        }
-        return this.settings.navigationContainer.offsetWidth || 0;
+        let width = this.settings.navigationContainer.getBoundingClientRect().width;
+        return width || this.settings.navigationContainer.offsetWidth || 0;
     }
     _isClosingSwipe(event) {
         let dragDistance = Math.abs(this.touch.distanceX());
-        let swipeLimit = this._navigationWidth() * this.touch.swipeWidthRatio;
-        let minimumFastSwipeDistance = Math.min(this.touch.fastSwipeDistance, swipeLimit || this.touch.fastSwipeDistance);
+        let swipeLimit = this.touch.navigationWidth * this.touch.swipeWidthRatio;
+        let minimumFastSwipeDistance = (swipeLimit > 0)
+            ? Math.min(this.touch.fastSwipeDistance, swipeLimit)
+            : this.touch.fastSwipeDistance;
         let isFastSwipe = this._touchTimestamp(event) - this.touch.startTimestamp <= this.touch.fastSwipeDuration;
 
         return this.touch.dragDirection() === this.settings.position &&
